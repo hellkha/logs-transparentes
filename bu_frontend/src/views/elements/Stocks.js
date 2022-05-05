@@ -1,4 +1,17 @@
 import React from "react";
+import {
+    Row,
+    Button,
+    Col,
+    Card,
+    CardHeader,
+    CardFooter,
+    CardBody,
+    CardImg,
+    CardTitle,
+    CardSubtitle,
+    CardText,
+  } from 'reactstrap';
 //import "./App.css";
 import {db} from '../../vibe/services/db';
 import props from 'prop-types';
@@ -18,6 +31,7 @@ export const Stocks = () => {
                   key={key}
                   hash={data.hash}
                   secao={data.secao}
+                  turno={data.turno}
                   zona={data.zona}
                   uf={data.uf}
                 />
@@ -32,35 +46,51 @@ export const Stocks = () => {
   const HomePageHeader = () => {
     return (
       <header className="header">
-        <h2>Your Stock Tracker</h2>
+        <h2>Todos Boletins de Urna</h2>
       </header>
     );
   };
   
-  const Stock = ({ hash, zona, secao, turno }) => {
+  const Stock = ({ hash, zona, secao, turno, uf }) => {
     if (!hash) return <div />;
     return (
-      <table>
-        <tbody>
-          <tr>
-            <td>
-                <h1>hash:</h1>
-                <h5>{hash}</h5>
-            </td>
-            <td>
-                <h1>zona:</h1>
-                <h5>{zona}</h5>
-            </td>
-            <td>
-                <h1>seção:</h1>
-                <h4>{secao}</h4>
-            </td>
-            <td>
-                <h1>turno:</h1>
-                <p>{turno}</p>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <>
+
+        <Card>
+        <CardHeader>Boletim de Urna {hash}</CardHeader>
+            <CardBody>
+                <CardText>
+                <span>
+                    Zona: 
+                </span>
+                {zona}
+                </CardText>
+            </CardBody>
+            <CardBody>
+                <CardText>
+                <span>
+                    Seção: 
+                </span>
+                {secao}
+                </CardText>
+            </CardBody>
+            <CardBody>
+                <CardText>
+                <span>
+                    Turno: 
+                </span>
+                {turno}
+                </CardText>
+            </CardBody>
+            <CardBody>
+                <CardText>
+                <span>
+                    UF: 
+                </span>
+                {uf}
+                </CardText>
+            </CardBody>
+        </Card>
+    </>
     );
   };

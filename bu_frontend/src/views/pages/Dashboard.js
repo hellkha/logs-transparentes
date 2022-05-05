@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import reactFeature from '../../assets/images/react-feature.svg';
 import sassFeature from '../../assets/images/sass-feature.svg';
 import bootstrapFeature from '../../assets/images/bootstrap-feature.svg';
@@ -17,7 +17,12 @@ import laptopImage from '../../assets/images/laptop.jpeg';
 import monitoresImage from '../../assets/images/monitores.png';
 import Chart from '../../views/elements/charts';
 import Progress from '../../views/elements/progress';
+import ExportData from '../../views/elements/ExportData';
+//Export Data File in JSON
+
+
 class Dashboard extends Component {
+  
   render() {
     const heroStyles = {
       padding: '50px 0 70px'
@@ -27,6 +32,7 @@ class Dashboard extends Component {
       //padding: '50px 0 70px',
       marginLeft: '25%'
     };
+    
 
     return (
       <div>
@@ -73,9 +79,9 @@ class Dashboard extends Component {
                 <CardBody>
                   <CardTitle>Clique aqui para baixar a prova do Último resultado parcial(raiz assinada)</CardTitle>
                   <CardText>
-                    
+                    <ExportData /> 
                   </CardText>
-                  <Button>Ver Mais</Button>
+                  
                 </CardBody>
               </Card>
           </Col>

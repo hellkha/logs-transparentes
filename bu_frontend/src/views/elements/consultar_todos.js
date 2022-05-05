@@ -21,13 +21,15 @@ import { Link, Route, Switch, useHistory } from 'react-router-dom';
 import { Loader } from '../../vibe/';
 import PageLoaderContext from '../../vibe/components/PageLoader/PageLoaderContext';
 import laptopImage from '../../assets/images/laptop.jpeg';
+import PostPage from './PostPage';
 
+import {Stocks} from './Stocks'
 import api from '../../vibe/services/api';
-import { Stocks } from "./Stocks";
 
 export default function Consultar_Todos() {
+    const [posts, setPosts] = useState([]);
     //const [search, setse] = useState([]);
-      const [posts, setPosts] = useState([]);
+
         useEffect(() => {
             const fetchPosts = async () => {
               try{
@@ -47,10 +49,10 @@ export default function Consultar_Todos() {
             fetchPosts()
             //eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
-
+    
     return(
-      <div className="App">
-        <Stocks />
+      <div >
+        <Stocks />  
       </div>
     );
 }
