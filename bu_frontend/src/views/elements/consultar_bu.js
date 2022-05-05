@@ -23,23 +23,59 @@ import PageLoaderContext from '../../vibe/components/PageLoader/PageLoaderContex
 import laptopImage from '../../assets/images/laptop.jpeg';
 
 class Consultar_BU extends Component {
+  axios = require('axios')
+  bu_api_url = "http://localhost:8080"
   constructor() {
     super();
     this.state = {};
   }
 
   render() {
-    return (
+    const { lista } = this.state
+    
+    var len = lista.length
+    var turno = new Map()
+    var uf = new Map()
+    var zona = new Map()
+    var secao = new Map()
+
+//    console.log(lista)
+
+    for (var i=0; i<len; i++) {
+      turno.set(lista[i].turno, lista[i].turno)
+      uf.set(lista[i].UF, lista[i].UF)
+      zona.set(lista[i].zona, lista[i].zona)
+      secao.set(lista[i].secao, lista[i].secao)
+    }
+
+    let turnoArr = Array.from(turno.keys())
+    let zonaArr = Array.from(zona.keys()).sort()
+    let secaoArr = Array.from(secao.keys()).sort()  
+    let ufArr = Array.from(uf.keys())
+
+
+
+/*    
+    console.log(turnoArr)
+    console.log(zonaArr)
+    console.log(secaoArr)
+    console.log(ufArr)
+*/
+
+
+      return (
       <Row>
         <Col md={12}>
           <Card>
             <CardHeader>Consultar Boletins de Urna - Turno</CardHeader>
             <CardBody>
               <FormGroup>
-                <Label for="exampleSelect">Turno</Label>
-                <Input type="select" name="select" id="exampleSelect">
-                  <option>1º</option>
-                  <option>2º</option>
+                <Label for="turnoSelect">Turno</Label>
+                <Input type="select" name="turno" id="turnoSelect" onChange={this.handleChange.bind(this)}>
+                <option value=""></option>
+                 {turnoArr.map((entry) => (
+                    <option value={entry}>{entry}º</option>
+                ))}
                 </Input>
             </FormGroup>
             </CardBody>
@@ -49,27 +85,34 @@ class Consultar_BU extends Component {
             <CardHeader>Consultar Boletins de Urna - Estado</CardHeader>
             <CardBody>
               <FormGroup>
-                <Label for="exampleSelect">UF</Label>
-                <Input type="select" name="select" id="exampleSelect">
-                  <option>SP</option>
-                  <option>MG</option>
+                <Label for="UFSelect">UF</Label>
+                <Input type="select" name="uf" id="uf" onChange={this.handleChange.bind(this)}>
+                <option value=""></option>
+                {ufArr.map((entry) => (
+                    <option value={entry}>{entry}</option>
+                ))}
                 </Input>
             </FormGroup>
             </CardBody>
             <CardBody>
               <FormGroup>
-                <Label for="exampleSelect">Zona</Label>
-                <Input type="select" name="select" id="exampleSelect">
-                  <option>SP</option>
-                  <option>MG</option>
+                <Label for="zonaSelect">Zona</Label>
+                <Input type="select" name="zona" id="zona" onChange={this.handleChange.bind(this)}>
+                <option value=""></option>
+                {zonaArr.map((entry) => (
+                    <option value={entry}>{entry}</option>
+                ))}
                 </Input>
             </FormGroup>
             </CardBody>
             <CardBody>
               <FormGroup>
-                <Label for="exampleSelect">Seção</Label>
-                <Input name="" id="exampleSelect">
-
+                <Label for="secaoSelect">Seção</Label>
+                <Input type="select" name="secao" id="secao" onChange={this.handleChange.bind(this)}>
+                <option value=""></option>
+                {secaoArr.map((entry) => (
+                    <option value={entry}>{entry}</option>
+                ))}
                 </Input>
             </FormGroup>
             </CardBody>
@@ -80,8 +123,8 @@ class Consultar_BU extends Component {
             <CardBody>
               <PageLoaderContext.Consumer>
                 {context => (
-                  <Link to="/elements/mostrarbu/id">
-                  <Button onClick={context.loadPage}>Consultar</Button>
+                  <Link to={"/elements/mostrarbu/id" }> 
+                  <Button onClick={this.handleConsultar.bind(this)}>Consultar</Button>
                   </Link>
                 )}
               </PageLoaderContext.Consumer>
