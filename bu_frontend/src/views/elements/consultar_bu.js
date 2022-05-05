@@ -24,7 +24,9 @@ import laptopImage from '../../assets/images/laptop.jpeg';
 
 class Consultar_BU extends Component {
   axios = require('axios')
-  bu_api_url = "http://localhost:8080"
+  bu_api_url = require('../../config.json').bu_api_url
+  // bu_api_url = "http://172.20.11.11:8080"
+
   constructor() {
     super();
     this.state = {};
