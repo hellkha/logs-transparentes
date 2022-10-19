@@ -1,6 +1,13 @@
-## Visão geral do sistema
-Sistema baseado em árvores de Merkle para promover maior transparência e auditabilidade dos dados. Sendo aplicado à eleição brasileira, esse protótipo armazena os boletins de urna (BUs), que contém o resultado dos votos registrados na urna. 
-Desse modo, o protótipo permite verificar a integridade dos BUs através da prova de inclusão. Além disso, o protótipo permite recontabilizar o resultado da eleição a partir de cada BU registrado na árvore.
+# Logs Transparentes para transparência dos dados
+#### Sistema baseado em árvores de Merkle para promover maior transparência e auditabilidade dos dados. 
+
+## Visão geral 
+
+Esse protótipo é aplicado à eleição brasileira. Assim, armazena de forma transparente os Boletins de Urna (resultado dos votos registrados na urna), e permite verificar a sua integridade. Também permite recontabilizar o resultado da eleição.
+
+* Publicação na SBSeg 2022 ([Artigo](https://sol.sbc.org.br/index.php/sbseg_estendido/article/view/21696/21520)) ([Vídeo](https://youtu.be/gRLXQXpbc5s "SBSeg"))
+
+
 
 ## Instalação
 Instruções para instalação e inicialização da ferramenta nas distribuições linux Ubuntu:
@@ -9,7 +16,9 @@ Instruções para instalação e inicialização da ferramenta nas distribuiçõ
 
 #### 1. nodejs
 ```
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt update
+sudo apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt-get install -y nodejs
 ```
 
@@ -84,7 +93,8 @@ npm install
 npm start
 ```
 
-## Algumas operações possíveis
+
+## Utilização
 Na tela inicial, é possível visualizar o resultado parcial da eleição. É possível também visualizar a raiz atual da árvore de Merkle, utilizada nas provas de inclusão e consistência.
 
 Outras funcionalidades podem ser acessadas no menu lateral
@@ -145,4 +155,3 @@ Essa funcionalidade permite recalcular os votos da eleição. Ao se iniciar a re
 Se não houver erros, o resultado final será exibido.
 
 ![recontabilizacao](https://user-images.githubusercontent.com/28439483/182241971-d1850ecb-62df-4b38-b32c-a08cb40a7e4d.png)
-
