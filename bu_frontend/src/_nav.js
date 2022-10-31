@@ -49,6 +49,14 @@ export default {
       },
     },
     {
+      name: 'Assinatura',
+      url: '/monitorarassinatura',
+      icon: 'Package',
+      badge: {
+        text: 'Monitor',
+      },
+    },
+    {
       name: 'Recontabilizar',
       url: '/recontabilizar',
       icon: 'Package',

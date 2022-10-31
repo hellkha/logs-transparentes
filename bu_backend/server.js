@@ -91,7 +91,7 @@ app.get("/tree", (req, res) => {
     res.json(err)
   })
 })
-
+// Vou precisar enviar um app get para arvore em determinado tempo
 app.get("/tree/root", (req, res) => {
   merkletree_adapter.getTreeRoot().then(root => {
     res.json(root)

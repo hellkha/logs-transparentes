@@ -1,13 +1,22 @@
 const db = require("../models");
 const modeloBoletim = require("../models/bu.model")
+const modeloRoot = require("../models/root.model")
 const merkletree_adapter = require("../adapters/merkletree.adapter")
 const mongoose = require("mongoose");
 const axios = require('axios');
-
+const url = 'mongodb://127.0.0.1:27017/bu_db';
+mongoose.connect(url)
 
 /* ----------------------------------- */
 const mqtt = require('mqtt');
 const mosquitto_url = require('../config/config').mosquitto_url
+
+const rootData = mongoose.model('root',{
+  Raiz: { type: String },
+  BUsAdicionados: { type: Number },
+  cont:0,
+});
+
 
 const consistencyCheckData = {
   raizAssinada: null,
@@ -15,6 +24,11 @@ const consistencyCheckData = {
   cont: 0,
   ultimo: false,
 }
+// // const rootData = {
+// //   raiz: null,
+// //   BUsAdicionados: [],
+// //   cont: 0,
+// // }
 
 /* Dados necessários para os monitores verificarem a prova de consistência */
 const consistencyProofData = {
@@ -47,8 +61,17 @@ exports.create = (data) => {
       merkletree_leaf: merkletree_data.added_leaf,
       ...data
     })
+    modeloRoot.modeloroot.create({
+      Raiz: merkletree_data.root,
+      ...data
+    })
     publishConsistencyCheck(merkletree_data.added_leaf)
-    publishConsistencyProof()    
+    publishConsistencyProof()   
+    // Aqui que eu vou ter que modificar adicionar o objeto no banco. (criar outra func por organização), basicamente nos moldes da func Publish ConsistencyCheck
+    // Essa função terá que chamar o merkletree_adapter.getTreeRoot() (que está no server.js tree/root) para salvar no banco,
+    // igual rola ali em cima no modelo boletim create, a cada 4 bus, eu tenho q salvar o (Id,tree root,timestamp, assinatura, bus adicionados)
+    //
+    getRootDB(merkletree_data.added_leaf)
   })
   return
 };
@@ -156,6 +179,32 @@ function publishConsistencyCheck(BUAdicionado){
       console.log(JSON.stringify(consistencyCheckData))
       consistencyCheckData.BUsAdicionados = []
       consistencyCheckData.cont ++
+      // Aqui que eu vou ter que modificar adicionar o objeto no banco. (criar outra func por organização)
+    }) 
+  }
+}
+function getRootDB(BUAdicionado){
+  rootData.BUsAdicionados.push(BUAdicionado)
+  console.log(BUAdicionado + " " + rootData.BUsAdicionados.length + " adicionado ao buffer de BUs")
+
+  if(rootData.BUsAdicionados.length >= TAM_MTREE_PARCIAL){
+    merkletree_adapter.getTreeRoot().then((treeRoot) => {
+      rootData.raizAssinada = treeRoot
+      publish("logs-transparentes/consistencyCheck", JSON.stringify(rootData))
+      console.log("\n\nRoot está no banco")
+      console.log(JSON.stringify(rootData))
+
+      rootData.cont ++
+      rootData.save(function(err,result){
+        if (err){
+            console.log(err);
+        }
+        else{
+            console.log(result)
+        }
+    })
+    rootData.BUsAdicionados = []
+    // Aqui que eu vou ter que modificar adicionar o objeto no banco. (criar outra func por organização)
     }) 
   }
 }

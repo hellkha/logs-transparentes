@@ -24,6 +24,7 @@ import ErrorPage from './pages/404';
 
 import Monitorar from './pages/Monitorar/Monitorar';
 import Monitorar2 from './pages/Monitorar/MonitorarSubConsistency';
+import MonitorarAssinatura from './pages/Monitorar/MonitorarAssinatura.js';
 import Consultar_BU from './elements/consultar_bu';
 import Auditar from './elements/auditar';
 import Inserir from './elements/inserir';
@@ -61,6 +62,13 @@ const pageList = [
   {
     path: '/monitorar2',
     component: Monitorar2
+    //badge: {
+    //  text: 'NEW',
+    //},
+  },
+  {
+    path: '/monitorarassinatura',
+    component: MonitorarAssinatura
     //badge: {
     //  text: 'NEW',
     //},
