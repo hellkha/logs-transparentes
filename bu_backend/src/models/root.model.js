@@ -7,7 +7,7 @@ const rootSchema = new mongoose.Schema({
     _id: { type: Number, required: true }  ,
     id: { type: Number, required: true }  ,
     raiz: String,
-    busadicionados: String,
+    busadicionados:{ type: Number, required: true }  ,
     timestamp: String,
     assinatura: String
 });

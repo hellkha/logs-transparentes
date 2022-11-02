@@ -11,11 +11,7 @@ mongoose.connect(url)
 const mqtt = require('mqtt');
 const mosquitto_url = require('../config/config').mosquitto_url
 
-const rootData = mongoose.model('root',{
-  Raiz: { type: String },
-  BUsAdicionados: { type: Number },
-  cont:0,
-});
+
 
 
 const consistencyCheckData = {
@@ -62,16 +58,19 @@ exports.create = (data) => {
       ...data
     })
     modeloRoot.modeloroot.create({
-      Raiz: merkletree_data.root,
+      raiz: merkletree_adapter.getTreeRoot(),
+      busadicionados: consistencyCheckData.BUsAdicionados.length,
       ...data
     })
+    getRootDB(merkletree_data.added_leaf)
     publishConsistencyCheck(merkletree_data.added_leaf)
     publishConsistencyProof()   
     // Aqui que eu vou ter que modificar adicionar o objeto no banco. (criar outra func por organização), basicamente nos moldes da func Publish ConsistencyCheck
     // Essa função terá que chamar o merkletree_adapter.getTreeRoot() (que está no server.js tree/root) para salvar no banco,
     // igual rola ali em cima no modelo boletim create, a cada 4 bus, eu tenho q salvar o (Id,tree root,timestamp, assinatura, bus adicionados)
     //
-    getRootDB(merkletree_data.added_leaf)
+    console.log('AAAAAAAAAAAAAAAA---------AAAAAAAAAAAAAAAAAAA')
+    console.log(merkletree_data.added_leaf)
   })
   return
 };
@@ -184,18 +183,15 @@ function publishConsistencyCheck(BUAdicionado){
   }
 }
 function getRootDB(BUAdicionado){
-  rootData.BUsAdicionados.push(BUAdicionado)
-  console.log(BUAdicionado + " " + rootData.BUsAdicionados.length + " adicionado ao buffer de BUs")
+  consistencyCheckData.BUsAdicionados.push(BUAdicionado)
+  console.log(BUAdicionado + " " + consistencyCheckData.BUsAdicionados.length + " adicionado ao buffer de BUs")
 
-  if(rootData.BUsAdicionados.length >= TAM_MTREE_PARCIAL){
+  if(consistencyCheckData.BUsAdicionados.length >= TAM_MTREE_PARCIAL){
     merkletree_adapter.getTreeRoot().then((treeRoot) => {
-      rootData.raizAssinada = treeRoot
-      publish("logs-transparentes/consistencyCheck", JSON.stringify(rootData))
-      console.log("\n\nRoot está no banco")
-      console.log(JSON.stringify(rootData))
-
-      rootData.cont ++
-      rootData.save(function(err,result){
+      //modeloRoot.raiz = treeRoot
+      modeloRoot.busadicionados = []
+      modeloRoot.cont ++
+      modeloRoot.save(function(err,result){
         if (err){
             console.log(err);
         }
@@ -203,7 +199,7 @@ function getRootDB(BUAdicionado){
             console.log(result)
         }
     })
-    rootData.BUsAdicionados = []
+    modeloRoot.BUsAdicionados = []
     // Aqui que eu vou ter que modificar adicionar o objeto no banco. (criar outra func por organização)
     }) 
   }
