@@ -27,6 +27,10 @@ mongoose.connect(url)
       console.log("infobus collection droped")
       // mongoose.connection.close()
     })
+    mongoose.connection.db.dropCollection("roots", ()=>{
+      console.log("roots collection droped")
+      // mongoose.connection.close()
+    })
   })
 
 
