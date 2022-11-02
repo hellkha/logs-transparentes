@@ -1,8 +1,8 @@
 const express = require("express");
-const axios = require('axios');
 const cors = require("cors");
 const app = express();
 const bu_controller = require("./src/controllers/bu.controller")
+const infobu_controller = require("./src/controllers/infobu.controller")
 const merkletree_adapter = require("./src/adapters/merkletree.adapter");
 const mongoose = require("mongoose");
 
@@ -21,6 +21,10 @@ mongoose.connect(url)
   .then(() => {
     mongoose.connection.db.dropCollection("bus", ()=>{
       console.log("bus collection droped")
+      // mongoose.connection.close()
+    })
+    mongoose.connection.db.dropCollection("infobus", ()=>{
+      console.log("infobus collection droped")
       // mongoose.connection.close()
     })
   })
@@ -131,6 +135,7 @@ app.get("/home",(req,res) => {   //Atualiza o grafico da tela principal
     res.json(err)
   })
 })
+
 app.get("/tree/leaves/qtd", (req, res) => {
   merkletree_adapter.getAllLeaves().then(leaves => {
     res.json(leaves.length)
@@ -138,6 +143,36 @@ app.get("/tree/leaves/qtd", (req, res) => {
     res.json(err)
   })
 })
+
+app.get("/infoBUs/create", (req, res) => {
+  infobu_controller.inicializar().then(response => {
+    console.log("infobus populados")
+    res.json(response)
+  }).catch((err) => {
+    res.json(err)
+  })
+})
+
+app.get("/infoBUs/:id", (req, res) => {
+  console.log(req.params.id)
+  infobu_controller.findById(req.params.id).then((response) => {
+    res.json(response);
+  }).catch((err) => {
+    console.log(err);
+    res.json(err)
+  })
+})
+
+app.get("/infoBUs", (req, res) => {
+  console.log(req.params.id)
+  infobu_controller.findAll().then((response) => {
+    res.json(response);
+  }).catch((err) => {
+    console.log(err);
+    res.json(err)
+  })
+})
+
 
 
 // set port, listen for requests

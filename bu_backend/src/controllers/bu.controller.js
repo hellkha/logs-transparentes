@@ -1,4 +1,3 @@
-const db = require("../models");
 const modeloBoletim = require("../models/bu.model")
 const modeloRoot = require("../models/root.model")
 const merkletree_adapter = require("../adapters/merkletree.adapter")
@@ -41,9 +40,6 @@ const TAM_MTREE_PARCIAL = 4
 const QTD_BUs_CONSISTENCY_PROOF = TAM_MTREE_PARCIAL //Frequência de envio da prova de consistência
 /* ----------------------------------- */
 
-// const BU = db.bu;
-
-//const BU = db.bu;
 // Create and Save a new BU
 exports.create = (data) => {
   buString = data.turno + data.secao + data.zona + data.UF + JSON.stringify(data.votos)
@@ -136,15 +132,15 @@ exports.findById = (id) => {
 }
 
 
-  exports.Sum = () => {
-    return modeloBoletim.modeloBoletim1.aggregate([
-      {$unwind:"$votos"},
-      {$group:{
-        _id:"$votos.nome",
-        votos:  {$sum: "$votos.votos"}
-      }}]).then((data)=>{
-        return data;
-      })
+exports.Sum = () => {
+  return modeloBoletim.modeloBoletim1.aggregate([
+    {$unwind:"$votos"},
+    {$group:{
+      _id:"$votos.nome",
+      votos:  {$sum: "$votos.votos"}
+    }}]).then((data)=>{
+      return data;
+    })
 };
 
 /**
